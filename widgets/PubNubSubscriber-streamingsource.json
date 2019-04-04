@@ -16,84 +16,73 @@
           }
         },
         {
-          "widget-type": "textbox",
-          "label": "Project ID",
-          "name": "project",
+          "label": "Channels",
+          "name": "channels",
+          "widget-type": "dsv",
           "widget-attributes": {
-            "default": "auto-detect"
+            "delimiter": ","
           }
         },
         {
           "widget-type": "textbox",
-          "label": "Subscription",
-          "name": "subscription",
+          "label": "Subscriber Key",
+          "name": "subscriber-key",
           "widget-attributes": {
-            "placeholder": "Subscription to read from"
-          }
-        },
-        {
-          "widget-type": "textbox",
-          "label": "Topic",
-          "name": "topic",
-          "widget-attributes": {
-            "placeholder": "Topic to create the subscription from if it does not already exist"
+            "placeholder": "Subscriber key configured for channels"
           }
         }
       ]
     },
     {
-      "label": "Credentials",
+      "label": "Advanced",
       "properties": [
         {
           "widget-type": "textbox",
-          "label": "Service Account File Path",
-          "name": "serviceFilePath",
+          "label": "Filter Expression",
+          "name": "filer-expression",
           "widget-attributes": {
-            "default": "auto-detect"
+            "default": "(price > 100.00 && channel == 'AAPL') || (price < 15.00 && channel == 'GOOG')"
           }
+        },
+        ,
+        {
+          "widget-type": "textbox",
+          "label": "Connection Timeout",
+          "name": "connection-timeout"
         }
       ]
     }
   ],
   "outputs": [
     {
-      "widget-type": "non-editable-schema-editor",
-      "schema": {
-        "name": "etlSchemaBody",
-        "type": "record",
-        "fields": [
-          {
-            "name": "message",
-            "type": "bytes"
-          },
-          {
-            "name": "id",
-            "type": "string"
-          },
-          {
-            "name": "timestamp",
-            "type": {
-              "type": "long",
-              "logicalType": "timestamp-micros"
+      "name": "schema",
+      "widget-type": "schema",
+      "widget-attributes": {
+        "default-schema": {
+          "name": "subscriber",
+          "type": "record",
+          "fields": [
+            {
+              "name": "timetoken",
+              "type": "long"
+            },
+            {
+              "name": "channel",
+              "type": ["string", null]
+            },
+            {
+              "name": "publisher",
+              "type": ["string", null]
+            },
+            {
+              "name": "payload",
+              "type": ["string", null]
             }
-          },
-          {
-            "name": "attributes",
-            "type": {
-              "type": "map",
-              "keys": "string",
-              "values": "string"
-            }
-          }
-        ]
+          ]
+        },
+        "schema-default-type": "string",
+        "property-watch": "format"
       }
     }
-  ],
-  "jump-config": {
-    "datasets": [
-      {
-        "ref-property-name": "referenceName"
-      }
-    ]
-  }
+  ]
 }

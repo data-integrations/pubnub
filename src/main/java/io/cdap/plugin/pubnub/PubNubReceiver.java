@@ -59,7 +59,8 @@ public final class PubNubReceiver extends Receiver<StructuredRecord> {
     pnConfiguration = new PNConfiguration();
     pnConfiguration.setSubscribeKey(config.getSubscriberKey());
     pnConfiguration.setConnectTimeout(config.getConnectionTimeout());
-
+    // Setting a filter to exclude messages that have the same subscriber id.
+    pnConfiguration.setFilterExpression("uuid != '" + pnConfiguration.getUuid() + "'");
     pubnub = new PubNub(pnConfiguration);
   }
 
