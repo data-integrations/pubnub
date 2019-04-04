@@ -20,10 +20,12 @@ import co.cask.cdap.api.annotation.Description;
 import co.cask.cdap.api.annotation.Name;
 import co.cask.cdap.api.annotation.Plugin;
 import co.cask.cdap.api.data.format.StructuredRecord;
+import co.cask.cdap.api.dataset.DatasetProperties;
 import co.cask.cdap.etl.api.PipelineConfigurer;
 import co.cask.cdap.etl.api.streaming.StreamingContext;
 import co.cask.cdap.etl.api.streaming.StreamingSource;
-import co.cask.hydrator.common.ReferencePluginConfig;
+import co.cask.hydrator.common.Constants;
+import co.cask.hydrator.common.IdUtils;
 import org.apache.spark.streaming.api.java.JavaDStream;
 import org.apache.spark.streaming.api.java.JavaReceiverInputDStream;
 import org.slf4j.Logger;
@@ -35,19 +37,19 @@ import org.slf4j.LoggerFactory;
 @Plugin(type = StreamingSource.PLUGIN_TYPE)
 @Name("PubNubSubscriber")
 @Description("A PubNub channel subscriber")
-public final class PubNubSubscriber extends ReferenceableSource<StructuredRecord> {
+public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
   private static final Logger LOG = LoggerFactory.getLogger(PubNubSubscriber.class);
-
-
   private PubNubConfig config;
 
-  public PubNubSubscriber(ReferencePluginConfig conf) {
-    super(conf);
+  public PubNubSubscriber(PubNubConfig conf) {
+    this.config = conf;
   }
 
   @Override
   public void configurePipeline(PipelineConfigurer configurer) throws IllegalArgumentException {
     super.configurePipeline(configurer);
+    IdUtils.validateId(config.referenceName);
+    configurer.createDataset(config.referenceName, Constants.EXTERNAL_DATASET_TYPE, DatasetProperties.EMPTY);
     configurer.getStageConfigurer().setOutputSchema(PubNubReceiver.SUBSCRIBER_SCHEMA);
   }
 

@@ -22,6 +22,7 @@ import co.cask.hydrator.common.ReferencePluginConfig;
 
 import java.util.Arrays;
 import java.util.List;
+import javax.annotation.Nullable;
 
 /**
  * PubNub configuration.
@@ -36,20 +37,28 @@ public final class PubNubConfig extends ReferencePluginConfig {
   private String subscriberKey;
 
   @Name("connection-timeout")
-  @Description("")
-  private int connectionTimeout;
+  @Description("Connection timeout")
+  @Nullable
+  private String connectionTimeout;
 
   @Name("filter-expression")
-  @Description("")
+  @Description("Filter expression")
+  @Nullable
   private String  filterExpression;
 
   @Name("proxy-hostname")
-  @Description("")
+  @Description("Socks proxy hostname or ip address")
+  @Nullable
   private String proxyHostname;
 
   @Name("proxy-port")
-  @Description("")
-  private int proxyPort;
+  @Description("Socks proxy port")
+  @Nullable
+  private String proxyPort;
+
+  @Name("schema")
+  @Description("Output schema")
+  private String schema;
 
   public PubNubConfig(String referenceName) {
     super(referenceName);
@@ -64,7 +73,7 @@ public final class PubNubConfig extends ReferencePluginConfig {
   }
 
   public int getConnectionTimeout() {
-    return connectionTimeout;
+    return Integer.parseInt(connectionTimeout);
   }
 
   public String getFilterExpression() {
@@ -76,6 +85,6 @@ public final class PubNubConfig extends ReferencePluginConfig {
   }
 
   public int getProxyPort() {
-    return proxyPort;
+    return Integer.parseInt(proxyPort);
   }
 }

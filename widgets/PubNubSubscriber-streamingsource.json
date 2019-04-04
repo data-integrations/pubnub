@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "spec-version": "1.6"
+    "spec-version": "1.5"
   },
   "display-name": "PubNub Subscriber",
   "configuration-groups": [
@@ -8,8 +8,8 @@
       "label": "Basic",
       "properties": [
         {
-          "widget-type": "textbox",
           "label": "Reference Name",
+          "widget-type": "textbox",
           "name": "referenceName",
           "widget-attributes": {
             "placeholder": "Name used to identify this sink for lineage"
@@ -24,8 +24,8 @@
           }
         },
         {
-          "widget-type": "textbox",
           "label": "Subscriber Key",
+          "widget-type": "textbox",
           "name": "subscriber-key",
           "widget-attributes": {
             "placeholder": "Subscriber key configured for channels"
@@ -37,18 +37,36 @@
       "label": "Advanced",
       "properties": [
         {
-          "widget-type": "textbox",
           "label": "Filter Expression",
-          "name": "filer-expression",
+          "widget-type": "textbox",
+          "name": "filter-expression",
           "widget-attributes": {
-            "default": "(price > 100.00 && channel == 'AAPL') || (price < 15.00 && channel == 'GOOG')"
+            "placeholder": "price > 100.00 && channel == 'AAPL'"
           }
         },
-        ,
         {
-          "widget-type": "textbox",
           "label": "Connection Timeout",
-          "name": "connection-timeout"
+          "widget-type": "textbox",
+          "name": "connection-timeout",
+          "widget-attributes": {
+            "placeholder": "Time in milliseconds"
+          }
+        },
+        {
+          "label": "Socks Proxy Hostname",
+          "widget-type": "textbox",
+          "name": "proxy-hostname",
+          "widget-attributes": {
+            "placeholder": "Hostname or IP address for socks proxy"
+          }
+        },
+        {
+          "label": "Socks Proxy Port",
+          "widget-type": "textbox",
+          "name": "proxy-port",
+          "widget-attributes": {
+            "placeholder": "Port for socks proxy"
+          }
         }
       ]
     }
@@ -68,20 +86,18 @@
             },
             {
               "name": "channel",
-              "type": ["string", null]
+              "type": ["string", "null"]
             },
             {
               "name": "publisher",
-              "type": ["string", null]
+              "type": ["string", "null"]
             },
             {
               "name": "payload",
-              "type": ["string", null]
+              "type": ["string", "null"]
             }
           ]
-        },
-        "schema-default-type": "string",
-        "property-watch": "format"
+        }
       }
     }
   ]

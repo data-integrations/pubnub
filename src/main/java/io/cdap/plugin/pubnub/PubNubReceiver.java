@@ -31,10 +31,12 @@ import org.apache.spark.streaming.receiver.Receiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.Serializable;
+
 /**
  * A receiver for consuming data
  */
-public final class PubNubReceiver extends Receiver<StructuredRecord> {
+public final class PubNubReceiver extends Receiver<StructuredRecord> implements Serializable {
   private static final Logger LOG = LoggerFactory.getLogger(PubNubReceiver.class);
   private final PubNubConfig config;
   private final PNConfiguration pnConfiguration;
