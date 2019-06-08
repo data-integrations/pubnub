@@ -80,6 +80,22 @@
           }
         },
         {
+          "widget-type": "textbox",
+          "label": "Subscribe Timeout (seconds)",
+          "name": "subscribe-timeout",
+          "widget-attributes": {
+            "default": "310"
+          }
+        },
+        {
+          "label": "Cipher Key",
+          "widget-type": "password",
+          "name": "cipher-key",
+          "widget-attributes": {
+            "placeholder": "Cipher key for encrypting communications with PubNub"
+          }
+        },
+        {
           "name": "use-proxy",
           "label" : "Use Proxy",
           "widget-type": "toggle",
@@ -100,8 +116,8 @@
           "label" : "Type of Proxy",
           "widget-type": "select",
           "widget-attributes": {
-            "default": "HTTP",
-            "values": ["HTTP", "SOCKS", "Direct"]
+            "default": "None",
+            "values": ["None", "HTTP", "SOCKS", "Direct"]
           }
         },
         {
@@ -121,11 +137,19 @@
           }
         },
         {
+          "label": "Proxy Username",
           "widget-type": "textbox",
-          "label": "Authorization Key",
-          "name": "auth-key",
+          "name": "proxy-username",
           "widget-attributes": {
-            "placeholder": "Authorization key"
+            "placeholder": "Proxy username"
+          }
+        },
+        {
+          "label": "Proxy Password",
+          "widget-type": "password",
+          "name": "proxy-password",
+          "widget-attributes": {
+            "placeholder": "Proxy password"
           }
         }
       ]

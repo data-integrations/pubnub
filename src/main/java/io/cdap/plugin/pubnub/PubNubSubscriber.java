@@ -31,6 +31,11 @@ import io.cdap.cdap.etl.api.streaming.StreamingSource;
 import io.cdap.plugin.common.Constants;
 import io.cdap.plugin.common.IdUtils;
 import io.cdap.plugin.common.ReferencePluginConfig;
+import okhttp3.Authenticator;
+import okhttp3.Credentials;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.Route;
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.storage.StorageLevel;
 import org.apache.spark.streaming.api.java.JavaDStream;
@@ -40,6 +45,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Option;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
@@ -64,7 +70,7 @@ import javax.annotation.Nullable;
  */
 @Plugin(type = StreamingSource.PLUGIN_TYPE)
 @Name("PubNubSubscriber")
-@Description("A PubNub channel subscriber")
+@Description("Reads realtime messages from PubNub cloud.")
 public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
   private static final Logger LOG = LoggerFactory.getLogger(PubNubSubscriber.class);
   private final PubNubConfig config;
@@ -125,21 +131,42 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
     PNConfiguration pnConfig = new PNConfiguration();
     pnConfig.setSubscribeKey(config.getSubscriberKey());
     pnConfig.setSecure(config.isSecure());
-    pnConfig.setConnectTimeout(config.getConnectionTimeout());
+    pnConfig.setSubscribeTimeout(config.getSubscribeTimeout());
     pnConfig.setReconnectionPolicy(config.getReconnectionPolicy());
+    pnConfig.setConnectTimeout(config.getConnectionTimeout());
     pnConfig.setMaximumReconnectionRetries(config.getMaxReconnectAttempts());
 
+    if (config.getCipherKey() != null) {
+      pnConfig.setCipherKey(config.getCipherKey());
+    }
+
     if (config.hasProxy()) {
+      if (config.getProxyType() != null) {
+        throw new IllegalArgumentException("Proxy enabled, but proxy type is specified as 'None'");
+      }
+
       if (config.getProxyHostname() != null && config.getProxyPort() != null) {
         SocketAddress proxyAddress = new InetSocketAddress(config.getProxyHostname(), config.getProxyPort());
-        pnConfig.setProxy(new Proxy(config.getProxyType(), proxyAddress));
+        Proxy proxy = new Proxy(config.getProxyType(), proxyAddress);
+        pnConfig.setProxy(proxy);
+        if (config.getProxyUsername() != null && config.getProxyPassword() != null) {
+          pnConfig.setProxyAuthenticator(new Authenticator() {
+            @Nullable
+            @Override
+            public Request authenticate(Route route, Response response) throws IOException {
+              if (response.request().header("Authorization") != null) {
+                return null; // Give up, we've already failed to authenticate.
+              }
+              String credential = Credentials.basic(config.getProxyUsername(), config.getProxyPassword());
+              return response.request().newBuilder()
+                .header("Authorization", credential)
+                .build();
+            }
+          });
+        }
       } else {
         throw new IllegalArgumentException("Proxy enabled, but hostname or port not specified.");
       }
-    }
-
-    if (config.getAuthKey() != null) {
-      pnConfig.setAuthKey(config.getAuthKey());
     }
 
     JavaDStream<StructuredRecord> stream = PubNubUtils.createStream(
@@ -193,6 +220,11 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
     @Nullable
     private Integer maxReconnectAttempts;
 
+    @Name("subscribe-timeout")
+    @Description("Subscribe request timeout. Defaults to 310 seconds")
+    @Nullable
+    private Integer subscribeTimeout;
+
     @Name("proxy-hostname")
     @Description("Proxy hostname")
     @Nullable
@@ -213,10 +245,10 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
     @Nullable
     private String reconnectionPolicy;
 
-    @Name("auth-key")
-    @Description("Authorizaton key")
+    @Name("cipher-key")
+    @Description("Cipher for encrypting communications to/from PubNub will be encrypted.")
     @Nullable
-    private String authKey;
+    private String cipher;
 
     @Name("proxy-type")
     @Description("Specify the type of proxy")
@@ -227,6 +259,16 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
     @Description("Specify a proxy to be used to connect to PubNub")
     @Nullable
     private Boolean useProxy;
+
+    @Name("proxy-username")
+    @Description("Proxy Username")
+    @Nullable
+    private String proxyUsername;
+
+    @Name("proxy-password")
+    @Description("Proxy Password")
+    @Nullable
+    private String proxyPassword;
 
     @Name("schema")
     @Description("Defines the output schema")
@@ -289,7 +331,15 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
         return Proxy.Type.SOCKS;
       }
 
-      return Proxy.Type.HTTP;
+      return null;
+    }
+
+    /**
+     * @return a <code>String</code> type representing a cipher.
+     */
+    @Nullable
+    public String getCipherKey() {
+      return cipher;
     }
 
     /**
@@ -327,7 +377,7 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
       }
 
       if (reconnectionPolicy.equalsIgnoreCase("exponential")) {
-        return  PNReconnectionPolicy.EXPONENTIAL;
+        return PNReconnectionPolicy.EXPONENTIAL;
       }
 
       return PNReconnectionPolicy.LINEAR;
@@ -343,12 +393,27 @@ public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
     }
 
     /**
-     * @return a <code>String</code> type specifying the authorization key for PubNub.
+     * @return a <code>Integer</code> type specifying subscribe timeout.
      */
     @Nullable
-    public String getAuthKey() {
-      return authKey;
+    public Integer getSubscribeTimeout() {
+      return subscribeTimeout;
+    }
+
+    /**
+     * @return a <code>String</code> type specifying proxy username.
+     */
+    @Nullable
+    public String getProxyUsername() {
+      return proxyUsername;
+    }
+
+    /**
+     * @return a <code>String</code> type specifying proxy password.
+     */
+    @Nullable
+    public String getProxyPassword() {
+      return proxyPassword;
     }
   }
-
 }

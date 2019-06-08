@@ -1,6 +1,6 @@
 #### **Description**
 
-Reads realtime events from PubNub cloud.
+Reads realtime messages from PubNub cloud.
 
 #### **Usage**
 
@@ -15,70 +15,70 @@ PubNub source can be used for retrieving events from the channels in realtime.
 
 ### Basic
 
-#### **Properties**
-
 * **Reference Name**
 
   Name used to uniquely identify this sink for lineage, annotating metadata, etc.
 
 * **Channels**
 
-  Dataset the tables belongs to. A dataset is contained within a specific project.
-Datasets are top-level containers that are used to organize and control access to tables and views.
-If dataset does not exist, it will be created.
+  List of PubNub channels to subscribe for messages.
 
 * **Subscriber Key**
 
-  Google Cloud Storage bucket to store temporary data in.
-It will be automatically created if it does not exist, but will not be automatically deleted.
-Temporary data will be deleted after it is loaded into BigQuery. If it is not provided, a unique
-bucket will be created and then deleted after the run finishes.
+  Subscribe Key provided by PubNub. Available from PubNub admin panel.
 
 ### Advanced
 
-#### **Properties**
-
 * **Secure**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Sets whether the communication with PubNub Hub is using TLS.
 
 * **Reconnection Policy**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Reconnection policy which will be used if/when networking goes down. There are three reconnection policy
+  available.
+
+    * **None** - Indicates that no action will be taken when connection goes down.
+    * **Linear** - Will attempt to reconnect every 3 seconds.
+    * **Exponential** - Uses exponential backoff to reconnect. Min back off of 1 seconds to max of 32 seconds.
+
 
 * **Connection Timeout**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  The maximum number of seconds which the client should wait for connection before timing out. Defaults of 5 seconds.
 
 * **Max Reconnect Attempt**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Number of times client will attempt to connect before giving up. Defaults to 5.
+
+* **Subscribe Timeout**
+
+  Specifies subscribe timeout. Defaults to 310 seconds.
+
+* **Cipher Key**
+
+  Cipher key to encrypt all communications between PubNub and client.
 
 * **Use Proxy**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Specifies whether a proxy should be used.
 
 * **Type of Proxy**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  The type of proxy to be used DIRECT, SOCKS or HTTP. Valid when 'Use Proxy' is set to 'Yes'.
 
 * **Proxy Hostname**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Hostname of proxy server. Valid when 'Use Proxy' is set to 'Yes'.
 
 * **Proxy Port**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Port on the host used by proxy server. Valid when 'Use Proxy' is set to 'Yes'.
 
-* **Authorization Key**
+* **Proxy Username**
 
-  The name of the field that will be used to determine which table to write to.
-Defaults to `tablename`.
+  Specifies Proxy Username. Valid when 'Use Proxy' is set to 'Yes'.
+
+* **Proxy Password**
+
+  Specifies Proxy Password. Valid when 'Use Proxy' is set to 'Yes'.
