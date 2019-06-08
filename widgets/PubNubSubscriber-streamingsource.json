@@ -2,7 +2,7 @@
   "metadata": {
     "spec-version": "1.5"
   },
-  "display-name": "PubNub Subscriber",
+  "display-name": "PubNub",
   "configuration-groups": [
     {
       "label": "Basic",
@@ -38,15 +38,6 @@
       "descripton" : "",
       "properties": [
         {
-          "name": "reconnection-policy",
-          "label" : "Reconnection Policy",
-          "widget-type": "select",
-          "widget-attributes": {
-            "default": "Linear",
-            "values": ["Linear", "Exponential", "None"]
-          }
-        },
-        {
           "name": "secure",
           "label" : "Use secure",
           "widget-type": "toggle",
@@ -60,6 +51,32 @@
               "label": "No"
             },
             "default": "true"
+          }
+        },
+        {
+          "name": "reconnection-policy",
+          "label" : "Reconnection Policy",
+          "widget-type": "select",
+          "widget-attributes": {
+            "default": "Linear",
+            "values": ["Linear", "Exponential", "None"]
+          }
+        },
+        {
+          "label": "Connection Timeout (seconds)",
+          "name": "connection-timeout",
+          "widget-attributes" : {
+            "default" : "5"
+          }
+        },
+        {
+          "name": "max-reconnect-attempts",
+          "label" : "Maximum Reconnect Attempts",
+          "widget-type": "number",
+          "widget-attributes": {
+            "default": "5",
+            "min": "1",
+            "max": "100"
           }
         },
         {
@@ -79,10 +96,19 @@
           }
         },
         {
+          "name": "proxy-type",
+          "label" : "Type of Proxy",
+          "widget-type": "select",
+          "widget-attributes": {
+            "default": "HTTP",
+            "values": ["HTTP", "SOCKS", "Direct"]
+          }
+        },
+        {
           "widget-type": "textbox",
           "label": "Proxy Hostname",
           "name": "proxy-hostname",
-          "widget-properties" : {
+          "widget-attributes" : {
             "placeholder" : "Proxy hostname"
           }
         },
@@ -90,20 +116,13 @@
           "widget-type": "textbox",
           "label": "Proxy Port",
           "name": "proxy-port",
-          "widget-properties" : {
+          "widget-attributes" : {
             "placeholder" : "Proxy port"
           }
         },
         {
-          "label": "Connection Timeout",
-          "name": "connection-timeout",
-          "widget-properties" : {
-            "default" : "100"
-          }
-        },
-        {
           "widget-type": "textbox",
-          "label": "Auth Key",
+          "label": "Authorization Key",
           "name": "auth-key",
           "widget-attributes": {
             "placeholder": "Authorization key"
@@ -126,6 +145,10 @@
               "type": "long"
             },
             {
+              "name": "payload",
+              "type": ["string", "null"]
+            },
+            {
               "name": "channel",
               "type": ["string", "null"]
             },
@@ -134,7 +157,7 @@
               "type": ["string", "null"]
             },
             {
-              "name": "payload",
+              "name": "subscription",
               "type": ["string", "null"]
             }
           ]
