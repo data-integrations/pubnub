@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "spec-version": "1.6"
+    "spec-version": "1.5"
   },
   "display-name": "PubNub Subscriber",
   "configuration-groups": [
@@ -35,20 +35,80 @@
     },
     {
       "label": "Advanced",
+      "descripton" : "",
       "properties": [
         {
-          "widget-type": "textbox",
-          "label": "Filter Expression",
-          "name": "filer-expression",
+          "name": "reconnection-policy",
+          "label" : "Reconnection Policy",
+          "widget-type": "select",
           "widget-attributes": {
-            "default": "(price > 100.00 && channel == 'AAPL') || (price < 15.00 && channel == 'GOOG')"
+            "default": "Linear",
+            "values": ["Linear", "Exponential", "None"]
           }
         },
-        ,
+        {
+          "name": "secure",
+          "label" : "Use secure",
+          "widget-type": "toggle",
+          "widget-attributes": {
+            "on": {
+              "value": "true",
+              "label": "Yes"
+            },
+            "off": {
+              "value": "false",
+              "label": "No"
+            },
+            "default": "true"
+          }
+        },
+        {
+          "name": "use-proxy",
+          "label" : "Use Proxy",
+          "widget-type": "toggle",
+          "widget-attributes": {
+            "on": {
+              "value": "true",
+              "label": "Yes"
+            },
+            "off": {
+              "value": "false",
+              "label": "No"
+            },
+            "default": "false"
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Proxy Hostname",
+          "name": "proxy-hostname",
+          "widget-properties" : {
+            "placeholder" : "Proxy hostname"
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Proxy Port",
+          "name": "proxy-port",
+          "widget-properties" : {
+            "placeholder" : "Proxy port"
+          }
+        },
         {
           "widget-type": "textbox",
           "label": "Connection Timeout",
-          "name": "connection-timeout"
+          "name": "connection-timeout",
+          "widget-properties" : {
+            "default" : "100"
+          }
+        },
+        {
+          "widget-type": "textbox",
+          "label": "Auth Key",
+          "name": "auth-key",
+          "widget-attributes": {
+            "placeholder": "Authorization key"
+          }
         }
       ]
     }
@@ -68,15 +128,15 @@
             },
             {
               "name": "channel",
-              "type": ["string", null]
+              "type": ["string", "null"]
             },
             {
               "name": "publisher",
-              "type": ["string", null]
+              "type": ["string", "null"]
             },
             {
               "name": "payload",
-              "type": ["string", null]
+              "type": ["string", "null"]
             }
           ]
         },
