@@ -53,7 +53,7 @@ import javax.annotation.Nullable;
 @Plugin(type = StreamingSource.PLUGIN_TYPE)
 @Name("PubNubSubscriber")
 @Description("A PubNub channel subscriber")
-public final class PubNubSubscriber extends ReferenceableSource<StructuredRecord> {
+public final class PubNubSubscriber extends StreamingSource<StructuredRecord> {
   private static final Logger LOG = LoggerFactory.getLogger(PubNubSubscriber.class);
   private final PubNubConfig config;
   private static final String CHANNEL = "channel";
@@ -69,7 +69,6 @@ public final class PubNubSubscriber extends ReferenceableSource<StructuredRecord
   );
 
   public PubNubSubscriber(PubNubConfig conf) {
-    super(conf);
     this.config = conf;
   }
 
