@@ -4,14 +4,21 @@ Reads realtime messages from PubNub cloud.
 
 #### **Usage**
 
-PubNub is a programmable network for developing realtime applications;
-an evolution from three-tier architecture, purpose-built to handle all
-the complexities of data streams. PubNub operates at the edge of the
-network to handle and apply logic to real-time data, thereby minimizing
-latency to 250 milliseconds or less worldwide, and guaranteeing reliability
-and scalability.
-
 PubNub source can be used for retrieving events from the channels in realtime.
+
+Each message from PubNub channel or channel is translated into a record that contains
+timetoken representing 17-digit (nano seconds) precision unix time in UTC is a
+ORTT (Origination Time Token),payload representing the message retrieved,subscription id,
+publisher id of message generator and the channel the message was retrieved from when messages
+from various channels are grouped into a channel group.
+
+Channels are how messages are sent and received. Clients that subscribe to a channel will
+receive messages that are published to that channel. Channels are very lightweight and flexible.
+Channels exist merely by using them.
+
+The cipher key is used to encrypt & decrypt data that is sent to (and through) PubNub.
+The secret key is used for message-signing (HMAC - Hash-based Message Authentication Code)
+to sign the message. Do not use the secret key as the cipher key.
 
 ### Basic
 
@@ -31,7 +38,7 @@ PubNub source can be used for retrieving events from the channels in realtime.
 
 * **Secure**
 
-  Sets whether the communication with PubNub Hub is using TLS.
+  Sets whether the communication with PubNub Hub is using TLS (Formerly SSL).
 
 * **Reconnection Policy**
 
