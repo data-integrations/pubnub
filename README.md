@@ -1,7 +1,11 @@
 # PubNub
+![cm-available](https://cdap-users.herokuapp.com/assets/cm-available.svg)
+![cdap-source](https://cdap-users.herokuapp.com/assets/cdap-realtime-source.svg)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Join CDAP community](https://cdap-users.herokuapp.com/badge.svg?t=wrangler)](https://cdap-users.herokuapp.com?t=1)
 
 PubNub is a global data stream network (DSN) and realtime network-as-a-service offering.
-This repository includes a PubNub subscriber for reading messages published on the channel.
+This repository includes a PubNub subscriber for reading messages published on one or more channels.
 To learn more, please [click here](docs/PubNubSubscriber-streamingsource.md)
 
 ## Contact
