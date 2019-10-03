@@ -22,7 +22,7 @@
   <groupId>io.cdap.plugin</groupId>
   <artifactId>pubnub</artifactId>
   <modelVersion>4.0.0</modelVersion>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.1.0-SNAPSHOT</version>
 
   <licenses>
     <license>
@@ -362,56 +362,38 @@
     </pluginManagement>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.0.0</version>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>3.5.1</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Embed-Dependency>*;inline=false;scope=compile</Embed-Dependency>
+            <Embed-Transitive>true</Embed-Transitive>
+            <Embed-Directory>lib</Embed-Directory>
+            <!--Only @Plugin classes in the export packages will be included as plugin-->
+            <_exportcontents>
+              io.cdap.plugin.pubnub.*;
+            </_exportcontents>
+          </instructions>
+        </configuration>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
-              <goal>shade</goal>
+              <goal>bundle</goal>
             </goals>
-            <configuration>
-              <relocations>
-                <relocation>
-                  <pattern>com.google.gson</pattern>
-                  <shadedPattern>hidden.com.google.gson</shadedPattern>
-                </relocation>
-              </relocations>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <excludes>
-                    <exclude>META-INF/services/**</exclude>
-                  </excludes>
-                </filter>
-              </filters>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Bundle-Name>
-                      <!-- Your plugin name -->
-                    </Bundle-Name>
-                    <Export-Package>
-                      io.cdap.plugin.pubnub;
-                      org.apache.spark.streaming.pubnub;
-                      com.pubnub.api.builder;
-                      com.pubnub.api.enums;
-                    </Export-Package>
-                  </manifestEntries>
-                </transformer>
-              </transformers>
-            </configuration>
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.7</source>
-          <target>1.7</target>
+          <source>1.8</source>
+          <target>1.8</target>
         </configuration>
       </plugin>
       <plugin>
@@ -538,7 +520,7 @@
         <version>1.0.1</version>
         <configuration>
           <cdapArtifacts>
-            <parent>system:cdap-data-streams[5.0.0,7.0.0-SNAPSHOT)</parent>
+            <parent>system:cdap-data-streams[6.1.0-SNAPSHOT,7.0.0-SNAPSHOT)</parent>
           </cdapArtifacts>
         </configuration>
         <executions>
