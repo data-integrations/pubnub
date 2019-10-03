@@ -65,8 +65,10 @@
         {
           "label": "Connection Timeout (seconds)",
           "name": "connection-timeout",
+          "widget-type": "number",
           "widget-attributes" : {
-            "default" : "5"
+            "default" : "5",
+            "min": "0"
           }
         },
         {
@@ -80,11 +82,12 @@
           }
         },
         {
-          "widget-type": "textbox",
+          "widget-type": "number",
           "label": "Subscribe Timeout (seconds)",
           "name": "subscribe-timeout",
           "widget-attributes": {
-            "default": "310"
+            "default": "310",
+            "min": "0"
           }
         },
         {
@@ -129,11 +132,13 @@
           }
         },
         {
-          "widget-type": "textbox",
+          "widget-type": "number",
           "label": "Proxy Port",
           "name": "proxy-port",
           "widget-attributes" : {
-            "placeholder" : "Proxy port"
+            "placeholder" : "Proxy port",
+            "min": "0",
+            "max": "65535"
           }
         },
         {
