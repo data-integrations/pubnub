@@ -93,7 +93,7 @@
     <spark2.version>2.2.0</spark2.version>
     <hadoop.version>2.3.0</hadoop.version>
     <slf4j.version>1.7.5</slf4j.version>
-    <gson.version>2.8.5</gson.version>
+    <gson.version>2.8.9</gson.version>
     <bahir.version>2.3.2</bahir.version>
     <main.basedir>${project.basedir}</main.basedir>
   </properties>
